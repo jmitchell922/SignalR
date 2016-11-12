@@ -12,5 +12,10 @@ namespace SignalRExample
         {
             Clients.All.Announce(message);
         }
+
+        public DateTime GetServerDateTime()
+        {
+            return DateTime.Now;
+        }
     }
 }

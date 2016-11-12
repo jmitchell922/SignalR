@@ -1,15 +1,27 @@
 ﻿(function () {
+    var myHub = $.connection.myHub;
+
     $.connection.hub.start()
        .done(function () {
-           console.log("Connection Established");
-           $.connection.myHub.server.announce("Connected!");
-       })
+            writeToPage("Successfully Connected!");
+            myHub.server.announce("Connected!");
+            myHub.server.getServerDateTime()
+                .done(function(data) {
+                    writeToPage(data);
+                })
+                .fail(function(e) {
+                    writeToPage(e);
+                });
+        })
        .fail(function () {
-           alert('Connection Failed');
-       });
+            writeToPage("Error: Connection Failed");
+        });
 
-    $.connection.myHub.client.announce = function (message) {
-        $("#welcome-messages").append(message + "<br />");
+    myHub.client.announce = function (message) {
+        writeToPage(message);
     }
 
+    var writeToPage = function(message) {
+        $("#welcome-messages").append(message + "<br />");
+    }
 })()
